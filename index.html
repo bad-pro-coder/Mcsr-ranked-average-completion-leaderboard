@@ -20,12 +20,6 @@ async function getDataRanked() {
 
     const result = await response.json();
     for (let i = 0; i < 100; i++) {
-      
-      /*if (overallLB.has(result.data.users[i].nickname)){
-        overallLB.set(result.data.users[i].nickname, overallLB.get(result.data.users[i].nickname) + result.data.users[i].predPhasePoint)
-      }else{
-        overallLB.set(result.data.users[i].nickname, result.data.users[i].predPhasePoint)
-      }*/
       let avg = await getAvg(result.data.users[i].nickname);
       overallLB.set(i, {average: avg.averageMins, rawAverage: avg.rawAvg, user: result.data.users[i].nickname})
       //console.log(overallLB.get(i))
@@ -45,8 +39,6 @@ async function getDataRanked() {
       catch{
         ;
       }
-      //document.getElementById("rankedLB").appendChild(player);
-      //console.log(result.data.users[i].nickname);
     }
   } catch (error) {
     console.error(error.message);
@@ -62,7 +54,7 @@ async function getLB(){
   }
 }
 getLB();
-
+document.getElementById("rankedLB").innerText = ""
 async function getAvg(user){
   try {
       const response = await fetch(`https://api.mcsrranked.com/users/${user}/`);
