@@ -7,11 +7,12 @@
 <h1>Mcsr ranked average completion leaderboard</h1>
 <ol id="rankedLB">  
 </ol>
+  <p id="loading"></p>
 </body>
 <script>
   const overallLB = new Map([]);
 async function getDataRanked() {
-  document.getElementById("rankedLB").innerText = "Loading........................"
+  document.getElementById("loading").innerText = "Loading........................"
   try {
     const response = await fetch("https://api.mcsrranked.com/leaderboard");
     if (!response.ok) {
@@ -52,7 +53,7 @@ async function getLB(){
     player.innerText = stats.user + " " + stats.average
     document.getElementById("rankedLB").appendChild(player);
   }
-  document.getElementById("rankedLB").innerText = ""
+  document.getElementById("loading").innerText = ""
 }
 getLB();
 async function getAvg(user){
