@@ -1,6 +1,11 @@
 <!DOCTYPE html>
+<html>
 <head>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+    html{
+      font-family:outfit;
+    }
     </style>
 </head>
 <body>
@@ -9,8 +14,7 @@
 <ol id="rankedLB">  
 </ol>
   <p id="loading"></p>
-</body>
-<script>
+  <script>
   const overallLB = new Map([]);
 async function getDataRanked() {
   document.getElementById("loading").innerText = "Loading........................"
@@ -76,3 +80,5 @@ async function getAvg(user){
 }
 
 </script>
+</body>
+</html>
