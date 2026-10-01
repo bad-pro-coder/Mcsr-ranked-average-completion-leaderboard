@@ -30,18 +30,21 @@ async function getDataRanked() {
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
-
     const result = await response.json();
     for (let i = 0; i < 100; i++) {
       let avg = await getAvg(result.data.users[i].nickname);
-      overallLB.set(i, {average: avg.averageMins, rawAverage: avg.rawAvg, user: result.data.users[i].nickname})
+      const response1 = await fetch(`https://api.mcsrranked.com/users/${result.data.users[i].nickname}/`)
+      let oldAvg = await response1.json()
+      let comparison = avg.rawAvg - ((oldAvg.data.statistics.season.completionTime.ranked/1000)/oldAvg.data.statistics.season.completions.ranked)
+      console.log(result.data.users[i].nickname + " " + comparison)
+      overallLB.set(i, {average: avg.averageMins, rawAverage: avg.rawAvg, user: result.data.users[i].nickname, change: comparison})
       let stop = false;
       let currentSpot = i;
       try{
         while (stop === false){
           if (overallLB.get(currentSpot).rawAverage < overallLB.get(currentSpot - 1).rawAverage){
          overallLB.set(currentSpot, overallLB.get(currentSpot - 1))
-         overallLB.set(currentSpot - 1, {average: avg.averageMins, rawAverage: avg.rawAvg, user: result.data.users[i].nickname})
+         overallLB.set(currentSpot - 1, {average: avg.averageMins, rawAverage: avg.rawAvg, user: result.data.users[i].nickname, change: comparison})
             currentSpot = currentSpot - 1
           }else{
             stop = true;
@@ -63,7 +66,13 @@ async function getLB(){
   for (let i = 0; i < 100; i++){
     const player = document.createElement("li")
     let stats = overallLB.get(i)
-    player.innerText = stats.user + " " + stats.average
+    if (stats.change > 0){
+      player.innerText = stats.user + " " + stats.average + " change since last visit: +" + (Math.floor(stats.change*10))/10 + "s"
+    }else if(stats.change < 0){
+      player.innerText = stats.user + " " + stats.average + " change since last visit: " + (Math.floor(stats.change*10))/10 + "s"
+    }else{
+      player.innerText = stats.user + " " + stats.average 
+    }
     document.getElementById("rankedLB").appendChild(player);
   }
 }
