@@ -62,7 +62,7 @@ async function getDataRanked() {
         while (stop === false){
           if (overallLB.get(currentSpot).rawAverage < overallLB.get(currentSpot - 1).rawAverage){
          overallLB.set(currentSpot, overallLB.get(currentSpot - 1))
-         overallLB.set(currentSpot - 1, {average: avg.averageMins, rawAverage: avg.rawAvg, user: result.data.users[i].nickname})
+         overallLB.set(currentSpot - 1, {average: avg.averageMins, rawAverage: avg.rawAvg, user: result.data.users[i].nickname, change: comparison})
             currentSpot = currentSpot - 1
           }else{
             stop = true;
